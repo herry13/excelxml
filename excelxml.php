@@ -216,7 +216,17 @@ class ExcelXML
 		{
 			return null;
 		}
-		$this->setTableNodeAttributes($tableNode, $row, $col);
+
+		/** fix suggested by Alexandre Polesi **/
+		//$this->setTableNodeAttributes($tableNode, $row, $col);
+		$columnCount = $tableNode->getAttribute("ss:ExpandedColumnCount");
+		$rowCount = $tableNode->getAttribute("ss:ExpandedRowCount");
+		$this->setTableNodeAttributes(
+			$tableNode,
+			max($row, $rowNodes->length, $rowCount),
+			max($col, $colNodes->length, $columnCount)
+		);
+
 		$dataNodes = $colNode->getElementsByTagName("Data");
 		
 		if ($dataNodes->length > 0)
